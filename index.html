@@ -294,7 +294,12 @@
     <div class="flex-1 flex max-w-7xl w-full mx-auto">
       <!-- Desktop Sidebar -->
       <aside class="hidden md:flex flex-col w-64 border-r border-slate-200 bg-white p-4 shrink-0 space-y-1">
-        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 py-2">Menu Utama</div>
+        <div class="flex items-center justify-between px-3 py-2 border-b border-slate-100 mb-2">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Menu Utama</div>
+          <button type="button" onclick="closeMobileNav()" class="md:hidden p-1.5 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 touch-btn" title="Tutup Menu">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
         <nav id="desktopNav" class="space-y-1"></nav>
 
         <div class="pt-4 mt-auto">
@@ -478,6 +483,28 @@
             </div>
           </div>
 
+          <!-- Bulk Multiple Action Toolbar -->
+          <div id="productBulkActionBar" class="hidden bg-orange-50 border border-orange-200 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 animate-in fade-in duration-150">
+            <div class="flex items-center gap-2 text-xs font-bold text-orange-900">
+              <span class="w-6 h-6 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]" id="selectedProdsCountBadge">0</span>
+              <span>Krochet dipilih untuk tindakan berbilang</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="bulkUpdateProductStatus('AKTIF')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs touch-btn">
+                <i class="fa-solid fa-check mr-1"></i> Tukar Aktif
+              </button>
+              <button type="button" onclick="bulkUpdateProductStatus('TIDAK_AKTIF')" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white font-bold rounded-xl text-xs touch-btn">
+                <i class="fa-solid fa-ban mr-1"></i> Tukar Tidak Aktif
+              </button>
+              <button type="button" onclick="bulkDeleteSelectedProducts()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs touch-btn">
+                <i class="fa-solid fa-trash-can mr-1"></i> Padam Terpilih
+              </button>
+              <button type="button" onclick="clearSelectedProducts()" class="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 font-bold rounded-xl text-xs touch-btn">
+                Batal
+              </button>
+            </div>
+          </div>
+
           <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row gap-3">
             <div class="relative flex-1">
               <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
@@ -501,6 +528,9 @@
               <table class="w-full text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 text-slate-700 text-xs uppercase tracking-wider font-bold border-b border-slate-200">
                   <tr>
+                    <th class="px-3 py-3.5 text-center w-10">
+                      <input type="checkbox" id="selectAllProductsCheckbox" onchange="toggleSelectAllProducts(this)" class="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 cursor-pointer">
+                    </th>
                     <th class="px-4 py-3.5">Produk</th>
                     <th class="px-4 py-3.5">Kategori</th>
                     <th class="px-4 py-3.5">Kos (RM)</th>
@@ -517,7 +547,7 @@
             <div id="productsEmptyState" class="hidden p-12 text-center">
               <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i>
               <p class="font-bold text-slate-700">Tiada produk dijumpai</p>
-              <p class="text-xs text-slate-400">Cuba ubah kata kunci carian atau tetapkan semula filter.</p>
+              <p class="text-xs text-slate-400">Tekan "Tambah Produk" untuk mula mendaftar menu krochet anda.</p>
             </div>
           </div>
         </div>
@@ -1026,8 +1056,11 @@
         <input type="hidden" id="prodEditId">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kod SKU</label>
-            <input type="text" id="prodSku" required placeholder="cth: KRC-AYM-01" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-orange-500">
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Kod SKU</label>
+              <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.2 rounded border border-orange-200">Auto</span>
+            </div>
+            <input type="text" id="prodSku" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-600 cursor-not-allowed" placeholder="Dijana secara automatik">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori</label>
@@ -1329,19 +1362,8 @@
        KROCHETPRO COMPREHENSIVE POS & STOCK ENGINE
        ========================================================================= */
 
-    // DEFAULT 10 KROCHET SAMPLES
-    const INITIAL_KROCHET_PRODUCTS = [
-      { id: 'PRD-001', sku: 'KRC-AYM-01', name: 'Krochet Ayam Klasik', category: 'Ayam', costPrice: 1.20, sellPrice: 2.50, promoPrice: 2.30, wholesalePrice: 2.00, stock: 80, minStock: 20, status: 'AKTIF' },
-      { id: 'PRD-002', sku: 'KRC-DNG-02', name: 'Krochet Daging Lada Hitam', category: 'Daging', costPrice: 1.50, sellPrice: 3.00, promoPrice: 2.80, wholesalePrice: 2.40, stock: 65, minStock: 15, status: 'AKTIF' },
-      { id: 'PRD-003', sku: 'KRC-CHS-03', name: 'Krochet Mozzarella Cheese Meleleh', category: 'Cheese', costPrice: 1.80, sellPrice: 3.50, promoPrice: 3.20, wholesalePrice: 2.90, stock: 45, minStock: 20, status: 'AKTIF' },
-      { id: 'PRD-004', sku: 'KRC-TRF-04', name: 'Krochet Daging & Cendawan Truffle', category: 'Special', costPrice: 2.20, sellPrice: 4.50, promoPrice: 4.00, wholesalePrice: 3.80, stock: 12, minStock: 15, status: 'AKTIF' },
-      { id: 'PRD-005', sku: 'KRC-SYR-05', name: 'Krochet Sayuran Sayang', category: 'Sayur', costPrice: 1.00, sellPrice: 2.20, promoPrice: 2.00, wholesalePrice: 1.80, stock: 90, minStock: 15, status: 'AKTIF' },
-      { id: 'PRD-006', sku: 'KRC-SFD-06', name: 'Krochet Udang & Ketam Jepun', category: 'Seafood', costPrice: 2.00, sellPrice: 3.80, promoPrice: 3.50, wholesalePrice: 3.10, stock: 8, minStock: 15, status: 'AKTIF' },
-      { id: 'PRD-007', sku: 'KRC-PDS-07', name: 'Krochet Ayam Pedas Crispy', category: 'Ayam', costPrice: 1.30, sellPrice: 2.60, promoPrice: 2.40, wholesalePrice: 2.10, stock: 55, minStock: 20, status: 'AKTIF' },
-      { id: 'PRD-008', sku: 'KRC-SWT-08', name: 'Krochet Ubi Manis Jepun', category: 'Special', costPrice: 1.10, sellPrice: 2.30, promoPrice: 2.00, wholesalePrice: 1.70, stock: 0, minStock: 10, status: 'AKTIF' },
-      { id: 'PRD-009', sku: 'KRC-RDG-09', name: 'Krochet Rendang Daging Tradisi', category: 'Daging', costPrice: 1.60, sellPrice: 3.20, promoPrice: 3.00, wholesalePrice: 2.60, stock: 40, minStock: 15, status: 'AKTIF' },
-      { id: 'PRD-010', sku: 'KRC-TLR-10', name: 'Krochet Telur Masin Creamy', category: 'Special', costPrice: 1.70, sellPrice: 3.40, promoPrice: 3.10, wholesalePrice: 2.80, stock: 30, minStock: 15, status: 'AKTIF' }
-    ];
+    // DATA INITIALIZATION (Clean state for actual business operation)
+    const INITIAL_KROCHET_PRODUCTS = [];
 
     const INITIAL_CATEGORIES = ['Ayam', 'Daging', 'Cheese', 'Sayur', 'Seafood', 'Special'];
 
@@ -1360,6 +1382,7 @@
     let appSales = [];
     let appPriceHistory = [];
     let appAuditLogs = [];
+    let selectedProductIds = new Set();
     let appSettings = {
       storeName: 'Krochet House',
       storeAddress: 'No. 12, Jalan Krochet Sedap, Cyberjaya, Selangor',
@@ -1387,7 +1410,18 @@
 
     function initAppDatabase() {
       try {
-        appProducts = JSON.parse(localStorage.getItem('krochet_products')) || INITIAL_KROCHET_PRODUCTS;
+        let storedProds = localStorage.getItem('krochet_products');
+        if (storedProds) {
+          appProducts = JSON.parse(storedProds) || [];
+          // Auto remove previous demo samples if present
+          if (appProducts.some(p => p.id === 'PRD-001' || p.id === 'PRD-002')) {
+            appProducts = [];
+            appStockLogs = [];
+          }
+        } else {
+          appProducts = INITIAL_KROCHET_PRODUCTS;
+        }
+
         appCategories = JSON.parse(localStorage.getItem('krochet_categories')) || INITIAL_CATEGORIES;
         appUsers = JSON.parse(localStorage.getItem('krochet_users')) || INITIAL_USERS;
         appStockLogs = JSON.parse(localStorage.getItem('krochet_stock_logs')) || [];
@@ -1566,6 +1600,7 @@
         return;
       }
 
+      closeMobileNav();
       currentView = viewId;
       localStorage.setItem('krochet_last_nav', viewId);
 
@@ -2282,6 +2317,8 @@
         return matchesSearch && matchesCat && matchesStock;
       });
 
+      updateBulkActionBar();
+
       if (filtered.length === 0) {
         tbody.innerHTML = '';
         emptyState.classList.remove('hidden');
@@ -2296,9 +2333,13 @@
         const margin = sell > 0 ? ((profit / sell) * 100).toFixed(1) : '0';
         const isLow = Number(p.stock) <= Number(p.minStock) && Number(p.stock) > 0;
         const isOut = Number(p.stock) === 0;
+        const isChecked = selectedProductIds.has(p.id);
 
         return `
-          <tr class="hover:bg-slate-50/80 transition">
+          <tr class="hover:bg-slate-50/80 transition ${isChecked ? 'bg-orange-50/40' : ''}">
+            <td class="px-3 py-3 text-center">
+              <input type="checkbox" class="product-row-checkbox w-4 h-4 rounded text-orange-600 focus:ring-orange-500 cursor-pointer" data-id="${p.id}" ${isChecked ? 'checked' : ''} onchange="toggleSelectProduct('${p.id}', this.checked)">
+            </td>
             <td class="px-4 py-3">
               <div class="font-bold text-slate-800">${p.name}</div>
               <div class="text-[11px] font-mono text-slate-400">${p.sku}</div>
@@ -2340,6 +2381,95 @@
       }).join('');
     }
 
+    // MULTIPLE TICK ACTIONS HANDLERS
+    function toggleSelectProduct(prodId, checked) {
+      if (checked) {
+        selectedProductIds.add(prodId);
+      } else {
+        selectedProductIds.delete(prodId);
+      }
+      updateBulkActionBar();
+    }
+
+    function toggleSelectAllProducts(headerCheckbox) {
+      const isChecked = headerCheckbox.checked;
+      if (isChecked) {
+        appProducts.forEach(p => selectedProductIds.add(p.id));
+      } else {
+        selectedProductIds.clear();
+      }
+      renderProductsTable();
+    }
+
+    function updateBulkActionBar() {
+      const bar = document.getElementById('productBulkActionBar');
+      const badge = document.getElementById('selectedProdsCountBadge');
+      const headerCb = document.getElementById('selectAllProductsCheckbox');
+      const count = selectedProductIds.size;
+
+      if (badge) badge.textContent = count;
+
+      if (count > 0) {
+        bar.classList.remove('hidden');
+      } else {
+        bar.classList.add('hidden');
+      }
+
+      if (headerCb) {
+        headerCb.checked = appProducts.length > 0 && count === appProducts.length;
+      }
+    }
+
+    function clearSelectedProducts() {
+      selectedProductIds.clear();
+      renderProductsTable();
+    }
+
+    function bulkUpdateProductStatus(newStatus) {
+      if (selectedProductIds.size === 0) return;
+      const count = selectedProductIds.size;
+      appProducts.forEach(p => {
+        if (selectedProductIds.has(p.id)) {
+          p.status = newStatus;
+        }
+      });
+      saveAllAppData();
+      logSystemActivity('KEMASKINI_STATUS_PUKAL', `Admin mengemas kini status ${count} produk kepada ${newStatus}.`, 'PRODUK');
+      showToast(`Status bagi ${count} produk telah dikemas kini kepada ${newStatus}!`, 'success');
+      clearSelectedProducts();
+    }
+
+    function bulkDeleteSelectedProducts() {
+      if (selectedProductIds.size === 0) return;
+      const count = selectedProductIds.size;
+      showConfirmModal(
+        'Padam Berbilang Produk',
+        `Adakah anda pasti untuk memadam ${count} produk krochet yang dipilih? Tindakan ini tidak boleh diundur.`,
+        () => {
+          appProducts = appProducts.filter(p => !selectedProductIds.has(p.id));
+          saveAllAppData();
+          logSystemActivity('PADAM_PRODUK_PUKAL', `Admin memadam ${count} produk secara serentak.`, 'PRODUK');
+          showToast(`${count} produk telah berjaya dipadam.`, 'info');
+          clearSelectedProducts();
+        }
+      );
+    }
+
+    // AUTOMATIC PRODUCT SKU GENERATOR
+    function generateAutoSku() {
+      let maxNum = 0;
+      appProducts.forEach(p => {
+        if (p.sku && p.sku.startsWith('KRC-')) {
+          const numPart = parseInt(p.sku.replace('KRC-', ''), 10);
+          if (!isNaN(numPart) && numPart > maxNum) {
+            maxNum = numPart;
+          }
+        }
+      });
+      const nextNum = maxNum + 1;
+      return `KRC-${String(nextNum).padStart(3, '0')}`;
+    }
+
     function openProductModal(prodId = null) {
       const title = document.getElementById('productModalTitle');
       const form = document.getElementById('productForm');
@@ -2364,7 +2494,7 @@
       } else {
         title.textContent = 'Daftar Produk Krochet Baharu';
         document.getElementById('prodEditId').value = '';
-        document.getElementById('prodSku').value = `KRC-${Date.now().toString().slice(-4)}`;
+        document.getElementById('prodSku').value = generateAutoSku();
       }
 
       openModal('productModal');
@@ -3299,10 +3429,20 @@
 
     function toggleMobileNav() {
       const sidebar = document.querySelector('aside');
-      sidebar.classList.toggle('hidden');
-      sidebar.classList.toggle('fixed');
-      sidebar.classList.toggle('inset-0');
-      sidebar.classList.toggle('z-40');
+      if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'z-50', 'w-72', 'shadow-2xl');
+      } else {
+        closeMobileNav();
+      }
+    }
+
+    function closeMobileNav() {
+      const sidebar = document.querySelector('aside');
+      if (sidebar) {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'inset-0', 'z-50', 'z-40', 'w-72', 'shadow-2xl');
+      }
     }
 
     function formatAppDate(date) {
