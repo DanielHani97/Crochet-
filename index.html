@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>KroketPro - Sistem Pengurusan Stok, Harga & POS</title>
   
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <meta name="theme-color" content="#ea580c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KroketPro">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23ea580c'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='50'>🥖</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ea580c'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='55'>🥖</text></svg>">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -95,6 +104,91 @@
     </div>
   </div>
 
+  <!-- PWA INSTALL GUIDE MODAL -->
+  <div id="installGuideModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 my-auto text-left">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
+            <i class="fa-brands fa-android"></i>
+          </div>
+          <h3 class="font-extrabold text-slate-800 text-base">Pasang ke Skrin Utama (Android)</h3>
+        </div>
+        <button onclick="closeModal('installGuideModal')" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-600">
+        <!-- Status check alert -->
+        <div id="pwaFileProtocolAlert" class="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 space-y-1.5 hidden">
+          <div class="font-bold flex items-center gap-2 text-amber-800">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm"></i>
+            <span>Punca Tiada Pilihan di Chrome:</span>
+          </div>
+          <p class="leading-relaxed text-[11px]">
+            Anda sedang membuka fail secara terus (<code>file:///</code>). Dasar keselamatan Google Chrome menghalang pilihan <b>"Add to Home Screen"</b> jika fail tidak dihoskan melalui <b>Web Server (HTTP / HTTPS)</b>.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]">1</span>
+            Cara Membuka Melalui Web Server (Percuma):
+          </h4>
+          <p class="text-[11px] text-slate-500 mb-2 leading-relaxed">
+            Untuk membolehkan Chrome Android memaparkan ikon pasang secara automatik, hoskan fail <code class="font-bold">index.html</code> ini menggunakan mana-mana perkhidmatan percuma berikut:
+          </p>
+          <ul class="space-y-1.5 pl-2 text-[11px]">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-cloud-arrow-up text-orange-600 mt-0.5"></i>
+              <span><b>Vercel / Netlify / GitHub Pages:</b> Muat naik fail <code>index.html</code> dan buka pautan HTTPS di Chrome.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-laptop-code text-blue-600 mt-0.5"></i>
+              <span><b>Local Network / Live Server (VS Code):</b> Buka pautan IP tempatan (cth: <code>http://192.168.1.X:5500</code>) di telefon Android anda.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]">2</span>
+            Langkah Tambah ke Skrin Utama:
+          </h4>
+          <div class="space-y-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+            <div class="flex items-center gap-2 text-slate-700 font-medium">
+              <i class="fa-solid fa-ellipsis-vertical text-slate-500 w-4 text-center"></i>
+              <span>Tekan butang <b>Menu 3-Titik</b> di penjuru atas kanan Chrome.</span>
+            </div>
+            <div class="flex items-center gap-2 text-slate-700 font-medium">
+              <i class="fa-solid fa-mobile-screen-button text-orange-600 w-4 text-center"></i>
+              <span>Pilih <b>"Add to Home screen"</b> atau <b>"Install app"</b>.</span>
+            </div>
+            <div class="flex items-center gap-2 text-slate-700 font-medium">
+              <i class="fa-solid fa-check text-emerald-600 w-4 text-center"></i>
+              <span>Tekan <b>"Install" / "Add"</b>. Ikon KroketPro akan muncul di skrin utama telefon anda seolah-olah aplikasi natif!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Trigger Button if browser supports beforeinstallprompt -->
+        <div id="directInstallBtnContainer" class="pt-2 hidden">
+          <button onclick="triggerPwaInstallPrompt()" class="w-full py-3 bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2 touch-btn text-sm">
+            <i class="fa-solid fa-download"></i>
+            <span>Pasang Aplikasi Sekarang</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="closeModal('installGuideModal')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs touch-btn">
+          Faham & Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- LOGIN SECTION -->
   <section id="loginScreen" class="fixed inset-0 z-40 bg-gradient-to-br from-amber-50 via-orange-50 to-orange-100 flex items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-orange-100/80 my-auto">
@@ -104,6 +198,20 @@
         </div>
         <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">KroketPro</h1>
         <p class="text-sm text-slate-500 mt-1">Sistem Pengurusan Stok, Harga & Jualan</p>
+      </div>
+
+      <!-- Quick Add to Home Screen helper banner on Login screen -->
+      <div onclick="openInstallGuideModal()" class="mb-4 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-2xl p-3 flex items-center justify-between cursor-pointer transition touch-btn">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center text-xs">
+            <i class="fa-brands fa-android"></i>
+          </div>
+          <div class="text-left">
+            <div class="text-xs font-bold text-orange-900">Guna di Android Phone?</div>
+            <div class="text-[10px] text-orange-700">Panduan Tambah ke Home Screen</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-arrow-right text-xs text-orange-600"></i>
       </div>
 
       <!-- Demo Accounts Info Badge -->
@@ -187,7 +295,13 @@
         </div>
 
         <!-- Role Badge, Alerts & Quick Actions -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Install / Add to Home Screen Button -->
+          <button onclick="openInstallGuideModal()" class="px-2.5 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-700 text-xs font-bold flex items-center gap-1.5 touch-btn" title="Pasang Aplikasi ke Skrin Utama">
+            <i class="fa-solid fa-arrow-down-to-bracket text-sm"></i>
+            <span class="hidden sm:inline">Pasang App</span>
+          </button>
+
           <!-- Low Stock Bell Alert -->
           <button onclick="openLowStockModal()" class="relative p-2 rounded-xl text-slate-600 hover:bg-slate-100 touch-btn" title="Peringatan Stok Rendah">
             <i class="fa-regular fa-bell text-lg"></i>
@@ -422,13 +536,16 @@
 
         <!-- VIEW: PRODUCTS MANAGEMENT -->
         <div id="view-products" class="app-view hidden space-y-6">
-          <!-- Top bar with actions -->
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <h2 class="text-xl sm:text-2xl font-black text-slate-900">Senarai Produk Kroket</h2>
               <p class="text-xs sm:text-sm text-slate-500">Urus maklumat, kategori, harga dan paras stok</p>
             </div>
             <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button id="manageCategoryBtn" onclick="openCategoryModal()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm border border-slate-200 flex items-center justify-center gap-2 touch-btn">
+                <i class="fa-solid fa-tags text-orange-600"></i>
+                <span>Urus Kategori</span>
+              </button>
               <button id="addProductBtn" onclick="openProductModal()" class="w-full sm:w-auto px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-sm shadow-md shadow-orange-600/25 flex items-center justify-center gap-2 touch-btn">
                 <i class="fa-solid fa-plus"></i>
                 <span>Tambah Produk</span>
@@ -446,13 +563,7 @@
             </div>
             <div class="flex gap-2">
               <select id="productFilterCategory" onchange="renderProductsTable()" class="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
-                <option value="ALL">Semua Kategori</option>
-                <option value="Ayam">Ayam</option>
-                <option value="Daging">Daging</option>
-                <option value="Cheese">Cheese</option>
-                <option value="Sayur">Sayur</option>
-                <option value="Seafood">Seafood</option>
-                <option value="Special">Special</option>
+                <!-- Injected dynamically via JS -->
               </select>
               <select id="productFilterStock" onchange="renderProductsTable()" class="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                 <option value="ALL">Semua Status</option>
@@ -484,7 +595,6 @@
                 </tbody>
               </table>
             </div>
-            <!-- Empty state placeholder -->
             <div id="productsEmptyState" class="hidden p-12 text-center">
               <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i>
               <p class="font-bold text-slate-700">Tiada produk dijumpai</p>
@@ -837,7 +947,7 @@
       </main>
     </div>
 
-    <!-- Mobile Bottom Navigation Bar (Visible on mobile/tablet screens) -->
+    <!-- Mobile Bottom Navigation Bar -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg">
       <button onclick="navigateTo('dashboard')" class="mobile-nav-btn flex flex-col items-center py-1 px-3 rounded-xl text-orange-600" data-view="dashboard">
         <i class="fa-solid fa-house text-lg"></i>
@@ -884,7 +994,15 @@
         </button>
       </div>
 
-      <nav id="mobileDrawerLinks" class="mt-4 space-y-1 overflow-y-auto flex-1">
+      <!-- Quick Install App CTA in Mobile Drawer -->
+      <div class="mt-3">
+        <button onclick="openInstallGuideModal(); toggleMobileNav();" class="w-full py-2 px-3 bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-700 rounded-xl text-xs font-bold flex items-center justify-center gap-2 touch-btn">
+          <i class="fa-solid fa-download"></i>
+          <span>Pasang ke Skrin Utama</span>
+        </button>
+      </div>
+
+      <nav id="mobileDrawerLinks" class="mt-3 space-y-1 overflow-y-auto flex-1">
         <!-- Injected via JS -->
       </nav>
 
@@ -918,14 +1036,14 @@
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Kategori *</label>
-            <select id="prodCategory" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-orange-500">
-              <option value="Ayam">Ayam</option>
-              <option value="Daging">Daging</option>
-              <option value="Cheese">Cheese</option>
-              <option value="Sayur">Sayur</option>
-              <option value="Seafood">Seafood</option>
-              <option value="Special">Special</option>
-            </select>
+            <div class="flex gap-1.5">
+              <select id="prodCategory" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-orange-500">
+                <!-- Injected dynamically via JS -->
+              </select>
+              <button type="button" onclick="openCategoryModal()" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600 touch-btn" title="Urus Kategori">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1092,45 +1210,91 @@
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nama Penuh *</label>
-          <input type="text" id="userFullName" required placeholder="cth: Siti Nurhaliza" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
+          <input type="text" id="userFullName" required placeholder="cth: Siti Nurhaliza" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Username *</label>
-          <input type="text" id="userUsername" required placeholder="cth: siti" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Kata Laluan <span id="userPassNote" class="text-slate-400 font-normal"></span></label>
-          <input type="password" id="userPassword" placeholder="Minimum 6 aksara" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
+          <input type="text" id="userUsername" required placeholder="cth: siti" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono focus:ring-1 focus:ring-orange-500">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Peranan (Role) *</label>
-            <select id="userRole" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
-              <option value="STAFF">Staff</option>
-              <option value="ADMIN">Admin</option>
+            <select id="userRole" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
+              <option value="STAFF">STAFF</option>
+              <option value="ADMIN">ADMIN</option>
             </select>
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Status Akaun *</label>
-            <select id="userStatus" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
+            <label class="block font-bold text-slate-700 mb-1">Status *</label>
+            <select id="userStatus" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
               <option value="ACTIVE">Aktif</option>
               <option value="DISABLED">Digantung</option>
             </select>
           </div>
         </div>
 
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kata Laluan <span id="userPassNote" class="text-slate-400 font-normal">(Wajib)</span></label>
+          <input type="password" id="userPassword" placeholder="Masukkan kata laluan" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-orange-500">
+        </div>
+
         <div class="pt-3 flex gap-2">
           <button type="button" onclick="closeModal('userModal')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl touch-btn">Batal</button>
-          <button type="submit" class="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-md touch-btn">Simpan Pengguna</button>
+          <button type="submit" class="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-md shadow-orange-600/30 touch-btn">Simpan Staf</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: SALES RECEIPT MODAL (PRINT & DOWNLOAD) -->
+  <!-- MODAL: MANAGE CATEGORIES (DYNAMIC ADD & DELETE) -->
+  <div id="categoryModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100 my-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-tags"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-800 text-base">Pengurusan Kategori</h3>
+            <p class="text-[11px] text-slate-400">Tambah dan padam kategori mengikut citarasa kedai</p>
+          </div>
+        </div>
+        <button onclick="closeModal('categoryModal')" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Add Category Input Form -->
+      <form id="addCategoryForm" onsubmit="handleAddCategory(event)" class="space-y-2 mb-4">
+        <label class="block text-xs font-bold text-slate-700">Tambah Kategori Baharu</label>
+        <div class="flex gap-2">
+          <input type="text" id="newCategoryInput" placeholder="cth: Cendawan, Pedas Lava, Manis" class="flex-1 px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-1 focus:ring-orange-500 focus:outline-none">
+          <button type="submit" class="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs shadow-sm flex items-center gap-1.5 touch-btn">
+            <i class="fa-solid fa-plus"></i>
+            <span>Tambah</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Category List -->
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-2">Senarai Kategori Sedia Ada</label>
+        <div id="categoryListContainer" class="space-y-2 max-h-60 overflow-y-auto pr-1 no-scrollbar text-xs">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+        <button type="button" onclick="closeModal('categoryModal')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs touch-btn">
+          Selesai & Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SALES RECEIPT MODAL -->
   <div id="receiptModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-100 my-auto">
       
@@ -1234,9 +1398,92 @@
 
   <script>
     /* =========================================================
+       PWA MANIFEST & INSTALL PROMPT INJECTION
+       ========================================================= */
+    let deferredPrompt = null;
+
+    // Inject Web App Manifest dynamically so Chrome recognizes it as standalone installable PWA
+    function injectWebManifest() {
+      try {
+        const manifest = {
+          name: "KroketPro - Sistem Pengurusan Kroket",
+          short_name: "KroketPro",
+          start_url: window.location.href,
+          display: "standalone",
+          background_color: "#ffffff",
+          theme_color: "#ea580c",
+          description: "Sistem Pengurusan Stok, Harga, POS dan Jualan Kroket Lengkap",
+          icons: [
+            {
+              src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ea580c'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-size='60'>🥖</text></svg>",
+              sizes: "192x192 512x512",
+              type: "image/svg+xml",
+              purpose: "any maskable"
+            }
+          ]
+        };
+        const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+        const manifestUrl = URL.createObjectURL(blob);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestUrl;
+        document.head.appendChild(link);
+      } catch (err) {
+        console.warn('PWA Manifest injection:', err);
+      }
+    }
+
+    // Capture the PWA install event if triggered by Chrome
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btnContainer = document.getElementById('directInstallBtnContainer');
+      if (btnContainer) {
+        btnContainer.classList.remove('hidden');
+      }
+    });
+
+    function triggerPwaInstallPrompt() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            showToast('Aplikasi berjaya dipasang ke Skrin Utama!', 'success');
+          }
+          deferredPrompt = null;
+          closeModal('installGuideModal');
+        });
+      } else {
+        showToast('Buka menu 3-titik Chrome dan pilih "Add to Home screen".', 'info');
+      }
+    }
+
+    function openInstallGuideModal() {
+      // Check if protocol is file:///
+      const isFileProtocol = window.location.protocol === 'file:';
+      const fileAlert = document.getElementById('pwaFileProtocolAlert');
+      if (fileAlert) {
+        if (isFileProtocol) {
+          fileAlert.classList.remove('hidden');
+        } else {
+          fileAlert.classList.add('hidden');
+        }
+      }
+
+      if (deferredPrompt) {
+        document.getElementById('directInstallBtnContainer').classList.remove('hidden');
+      }
+
+      openModal('installGuideModal');
+    }
+
+    /* =========================================================
        DEFAULT SEED DATA & CONSTANTS
        ========================================================= */
     const STORAGE_PREFIX = 'kroket_system_v1_';
+
+    // Default dynamic categories
+    const DEFAULT_CATEGORIES = ['Ayam', 'Daging', 'Cheese', 'Sayur', 'Seafood', 'Special'];
 
     // 10 Sample Croquettes as requested
     const DEFAULT_PRODUCTS = [
@@ -1284,7 +1531,7 @@
         sellingPrice: 3.80,
         promoPrice: 3.50,
         wholesalePrice: 3.20,
-        stockQty: 18, // Low Stock example!
+        stockQty: 18,
         minStock: 25,
         unit: 'pcs',
         status: 'ACTIVE',
@@ -1318,7 +1565,7 @@
         sellingPrice: 2.20,
         promoPrice: 2.00,
         wholesalePrice: 1.80,
-        stockQty: 6, // Low stock example
+        stockQty: 6,
         minStock: 15,
         unit: 'pcs',
         status: 'ACTIVE',
@@ -1335,7 +1582,7 @@
         sellingPrice: 4.80,
         promoPrice: 4.50,
         wholesalePrice: 4.00,
-        stockQty: 0, // OUT OF STOCK example!
+        stockQty: 0,
         minStock: 12,
         unit: 'pcs',
         status: 'ACTIVE',
@@ -1418,7 +1665,7 @@
         id: 'USR-01',
         fullName: 'Pengurus Admin',
         username: 'admin',
-        passwordHash: 'admin123', // In demo prototype
+        passwordHash: 'admin123',
         role: 'ADMIN',
         status: 'ACTIVE',
         lastLogin: '16/09/2026 09:00'
@@ -1445,6 +1692,7 @@
     // Global App State
     let currentUser = null;
     let products = [];
+    let categories = [];
     let users = [];
     let sales = [];
     let stockLogs = [];
@@ -1465,10 +1713,10 @@
     let salesChartInstance = null;
     let stockChartInstance = null;
 
-    /* Initialize Database from localStorage or defaults */
     function initDatabase() {
       try {
         products = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'products')) || DEFAULT_PRODUCTS;
+        categories = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'categories')) || DEFAULT_CATEGORIES;
         users = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'users')) || DEFAULT_USERS;
         settings = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'settings')) || DEFAULT_SETTINGS;
         stockLogs = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'stockLogs')) || [];
@@ -1476,13 +1724,15 @@
         auditLogs = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'auditLogs')) || [];
         sales = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'sales')) || [];
 
-        // If fresh setup, inject sample transactions
         if (sales.length === 0) {
           seedSampleTransactions();
         }
+
+        populateCategoryDropdowns();
       } catch (e) {
         console.error('Error loading DB:', e);
         products = [...DEFAULT_PRODUCTS];
+        categories = [...DEFAULT_CATEGORIES];
         users = [...DEFAULT_USERS];
         settings = {...DEFAULT_SETTINGS};
       }
@@ -1491,6 +1741,7 @@
     function syncStorage(key) {
       try {
         if (key === 'products') localStorage.setItem(STORAGE_PREFIX + 'products', JSON.stringify(products));
+        if (key === 'categories') localStorage.setItem(STORAGE_PREFIX + 'categories', JSON.stringify(categories));
         if (key === 'users') localStorage.setItem(STORAGE_PREFIX + 'users', JSON.stringify(users));
         if (key === 'settings') localStorage.setItem(STORAGE_PREFIX + 'settings', JSON.stringify(settings));
         if (key === 'stockLogs') localStorage.setItem(STORAGE_PREFIX + 'stockLogs', JSON.stringify(stockLogs));
@@ -1502,7 +1753,6 @@
       }
     }
 
-    /* Seed initial sample sales and stock audit entries */
     function seedSampleTransactions() {
       const now = new Date();
       const sampleSale = {
@@ -1522,7 +1772,6 @@
       };
       sales.push(sampleSale);
 
-      // Seed initial stock logs
       stockLogs.push({
         id: 'LOG-' + Date.now(),
         date: '16/09/2026',
@@ -1536,7 +1785,6 @@
         user: 'Admin'
       });
 
-      // Seed initial audit log
       auditLogs.push({
         timestamp: '16/09/2026 08:30',
         user: 'Admin',
@@ -1550,7 +1798,6 @@
       syncStorage('auditLogs');
     }
 
-    // Toast notification utility
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
@@ -1587,7 +1834,6 @@
       }, 3500);
     }
 
-    // Modal helpers (Never use alert/confirm)
     function openModal(id) {
       document.getElementById(id).classList.remove('hidden');
     }
@@ -1616,13 +1862,11 @@
       confirmCallback = null;
     };
 
-    /* Format Currency */
     function formatRM(num) {
       const val = parseFloat(num) || 0;
       return 'RM ' + val.toFixed(2);
     }
 
-    /* Format Date Time Helper */
     function getNowDateTimeString() {
       const now = new Date();
       const d = String(now.getDate()).padStart(2, '0');
@@ -1641,7 +1885,6 @@
       return `${d}/${m}/${y}`;
     }
 
-    /* Add System Audit Log */
     function recordAuditLog(module, action) {
       const log = {
         timestamp: getNowDateTimeString(),
@@ -1651,11 +1894,10 @@
         ip: '127.0.0.1 (Web Local)'
       };
       auditLogs.unshift(log);
-      if (auditLogs.length > 300) auditLogs.pop(); // Keep manageable
+      if (auditLogs.length > 300) auditLogs.pop();
       syncStorage('auditLogs');
     }
 
-    /* Quick fill for Demo Accounts */
     function quickFillLogin(u, p) {
       document.getElementById('loginUsername').value = u;
       document.getElementById('loginPassword').value = p;
@@ -1688,7 +1930,6 @@
         return;
       }
 
-      // Login Successful
       currentUser = user;
       user.lastLogin = getNowDateTimeString();
       syncStorage('users');
@@ -1714,11 +1955,9 @@
       });
     }
 
-    /* Setup UI elements, badges & navigation based on User Role */
     function setupUserSessionUI() {
       const isAdmin = currentUser.role === 'ADMIN';
 
-      // Header profile
       document.getElementById('userNameDisplay').innerText = currentUser.fullName;
       document.getElementById('userRoleBadge').innerText = currentUser.role;
       document.getElementById('userRoleBadge').className = isAdmin 
@@ -1728,10 +1967,8 @@
       const initials = currentUser.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
       document.getElementById('userAvatarText').innerText = initials;
 
-      // Header store name
       document.getElementById('headerStoreName').innerText = settings.storeName || 'Kroket Crispy House';
 
-      // Desktop nav links according to Role
       const desktopNav = document.getElementById('desktopNav');
       const mobileNavDrawer = document.getElementById('mobileDrawerLinks');
 
@@ -1778,9 +2015,11 @@
       desktopNav.innerHTML = desktopHtml;
       mobileNavDrawer.innerHTML = drawerHtml;
 
-      // Hide or show Admin-only controls in Views
       const addProductBtn = document.getElementById('addProductBtn');
       if (addProductBtn) addProductBtn.style.display = isAdmin ? 'flex' : 'none';
+
+      const manageCategoryBtn = document.getElementById('manageCategoryBtn');
+      if (manageCategoryBtn) manageCategoryBtn.style.display = isAdmin ? 'flex' : 'none';
 
       const btnStockAdjAdmin = document.getElementById('btnStockAdjAdmin');
       if (btnStockAdjAdmin) btnStockAdjAdmin.style.display = isAdmin ? 'flex' : 'none';
@@ -1791,28 +2030,23 @@
       const adminAnalyticsSection = document.getElementById('adminAnalyticsSection');
       if (adminAnalyticsSection) adminAnalyticsSection.style.display = isAdmin ? 'grid' : 'none';
 
-      // Load Settings into form
       document.getElementById('settingStoreName').value = settings.storeName || '';
       document.getElementById('settingStoreAddress').value = settings.storeAddress || '';
       document.getElementById('settingStorePhone').value = settings.storePhone || '';
       document.getElementById('settingReceiptNote').value = settings.receiptNote || '';
     }
 
-    /* Navigation View Controller with Strict RBAC Guards */
     function navigateTo(viewId) {
       const isAdmin = currentUser && currentUser.role === 'ADMIN';
       const adminOnlyViews = ['prices', 'users', 'audit', 'settings'];
 
-      // Guard check: Staff cannot access Admin views even if triggered
       if (adminOnlyViews.includes(viewId) && !isAdmin) {
         showToast('Akses Ditolak: Halaman ini hanya boleh diakses oleh Admin.', 'error');
         return;
       }
 
-      // Hide all views
       document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden'));
 
-      // Show target view
       const target = document.getElementById(`view-${viewId}`);
       if (target) {
         target.classList.remove('hidden');
@@ -1821,7 +2055,6 @@
         viewId = 'dashboard';
       }
 
-      // Highlight active nav in desktop
       document.querySelectorAll('.nav-item').forEach(el => {
         if (el.getAttribute('data-nav') === viewId) {
           el.classList.add('bg-orange-50', 'text-orange-600', 'font-bold');
@@ -1830,7 +2063,6 @@
         }
       });
 
-      // Highlight active mobile bottom nav
       document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
         if (btn.getAttribute('data-view') === viewId) {
           btn.classList.add('text-orange-600');
@@ -1841,7 +2073,6 @@
         }
       });
 
-      // Render view-specific data
       if (viewId === 'dashboard') renderDashboard();
       if (viewId === 'pos') renderPosCatalog();
       if (viewId === 'products') renderProductsTable();
@@ -1854,7 +2085,6 @@
       if (viewId === 'users') renderUsersTable();
       if (viewId === 'audit') renderSystemAuditLogs();
 
-      // Scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1867,7 +2097,6 @@
       const isAdmin = currentUser.role === 'ADMIN';
       const todayDateStr = getNowDateOnly();
 
-      // Filter today's sales
       const todaySales = sales.filter(s => {
         const d = new Date(s.timestamp);
         const dayStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
@@ -1877,7 +2106,6 @@
       const todayRevenue = todaySales.reduce((acc, s) => acc + s.total, 0);
       const todayProfit = todaySales.reduce((acc, s) => acc + (s.total - (s.totalCost || 0)), 0);
 
-      // Stock health
       let totalStockUnits = 0;
       let lowStockCount = 0;
       let outStockCount = 0;
@@ -1894,7 +2122,6 @@
         }
       });
 
-      // Update low stock alerts in Header and Banner
       const hasCriticalStock = (lowStockCount + outStockCount) > 0;
       const badge = document.getElementById('lowStockBadge');
       const banner = document.getElementById('lowStockBanner');
@@ -1909,7 +2136,6 @@
         banner.classList.add('hidden');
       }
 
-      // Render Dynamic KPI Grid
       const grid = document.getElementById('dashboardStatsGrid');
       if (isAdmin) {
         grid.innerHTML = `
@@ -1950,7 +2176,6 @@
           </div>
         `;
       } else {
-        // Staff Dashboard: Simplified & focused on operational efficiency
         grid.innerHTML = `
           <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-xs">
             <div class="flex items-center justify-between mb-2">
@@ -1987,7 +2212,6 @@
         `;
       }
 
-      // Recent transactions list
       const recentContainer = document.getElementById('dashRecentSalesList');
       const latestSales = sales.slice(0, 5);
       if (latestSales.length === 0) {
@@ -2004,141 +2228,270 @@
                 </div>
                 <div>
                   <div class="font-bold text-xs text-slate-800">${s.receiptNo}</div>
-                  <div class="text-[10px] text-slate-400">${timeFormatted} • ${s.paymentMethod} • ${s.cashier}</div>
+                  <div class="text-[10px] text-slate-400">${timeFormatted} • ${s.items.length} item • ${s.cashier}</div>
                 </div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-xs text-slate-900">${formatRM(s.total)}</div>
-                <button onclick="viewReceiptByNo('${s.receiptNo}')" class="text-[10px] text-orange-600 font-semibold hover:underline">Lihat Resit</button>
+                <div class="font-black text-xs text-slate-900">${formatRM(s.total)}</div>
+                <div class="text-[10px] text-slate-500">${s.paymentMethod}</div>
               </div>
             </div>
           `;
         }).join('');
       }
 
-      // Top Selling Products Calculation
-      const productSalesCount = {};
+      // Top Selling Products
+      const topContainer = document.getElementById('dashTopProductsList');
+      const productCounts = {};
       sales.forEach(s => {
-        s.items.forEach(item => {
-          productSalesCount[item.name] = (productSalesCount[item.name] || 0) + item.qty;
+        s.items.forEach(it => {
+          productCounts[it.productId] = (productCounts[it.productId] || 0) + it.qty;
         });
       });
 
-      const topProducts = Object.entries(productSalesCount)
-        .sort((a, b) => b[1] - a[1])
+      const sortedTop = Object.keys(productCounts)
+        .map(id => ({ product: products.find(p => p.id === id), qty: productCounts[id] }))
+        .filter(item => item.product)
+        .sort((a, b) => b.qty - a.qty)
         .slice(0, 5);
 
-      const topContainer = document.getElementById('dashTopProductsList');
-      if (topProducts.length === 0) {
-        topContainer.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Belum ada rekod jualan produk.</p>`;
+      if (sortedTop.length === 0) {
+        topContainer.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Tiada rekod jualan produk lagi.</p>`;
       } else {
-        topContainer.innerHTML = topProducts.map(([name, qty], idx) => `
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <span class="w-6 h-6 rounded-lg bg-orange-100 text-orange-700 text-xs font-black flex items-center justify-center">${idx + 1}</span>
-              <span class="text-xs font-semibold text-slate-700">${name}</span>
+        const maxQty = Math.max(...sortedTop.map(x => x.qty), 1);
+        topContainer.innerHTML = sortedTop.map(item => {
+          const pct = Math.round((item.qty / maxQty) * 100);
+          return `
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-slate-800">${item.product.name}</span>
+                <span class="text-orange-600 font-black">${item.qty} pcs</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2">
+                <div class="bg-orange-500 h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
             </div>
-            <span class="text-xs font-black text-slate-900">${qty} pcs</span>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
 
-      // Update Charts if Admin
+      // Render Charts if Admin
       if (isAdmin) {
-        document.getElementById('statStockNormal').innerText = normalStockCount;
-        document.getElementById('statStockLow').innerText = lowStockCount;
-        document.getElementById('statStockOut').innerText = outStockCount;
-
-        renderSalesTrendChart();
-        renderStockDoughnutChart(normalStockCount, lowStockCount, outStockCount);
+        renderDashboardCharts();
       }
     }
 
-    function renderSalesTrendChart() {
-      const ctx = document.getElementById('salesTrendChart').getContext('2d');
-      if (salesChartInstance) salesChartInstance.destroy();
+    function renderDashboardCharts() {
+      const salesCanvas = document.getElementById('salesTrendChart');
+      const stockCanvas = document.getElementById('stockDoughnutChart');
+      if (!salesCanvas || !stockCanvas || typeof Chart === 'undefined') return;
 
-      // Generate last 7 days labels
-      const labels = [];
+      // Last 7 days labels & revenue calculation
+      const days = [];
       const revenueData = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        const dayLabel = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
-        labels.push(dayLabel);
+        const dayStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+        days.push(dayStr);
 
-        // Calculate revenue for that day
-        const dayTotal = sales.filter(s => {
-          const sd = new Date(s.timestamp);
-          return sd.getDate() === d.getDate() && sd.getMonth() === d.getMonth();
+        const totalForDay = sales.filter(s => {
+          const saleDate = new Date(s.timestamp);
+          return saleDate.getDate() === d.getDate() && saleDate.getMonth() === d.getMonth() && saleDate.getFullYear() === d.getFullYear();
         }).reduce((sum, s) => sum + s.total, 0);
-
-        revenueData.push(dayTotal);
+        revenueData.push(totalForDay);
       }
 
-      salesChartInstance = new Chart(ctx, {
+      if (salesChartInstance) salesChartInstance.destroy();
+      salesChartInstance = new Chart(salesCanvas, {
         type: 'line',
         data: {
-          labels: labels,
+          labels: days,
           datasets: [{
-            label: 'Hasil Jualan (RM)',
+            label: 'Hasil (RM)',
             data: revenueData,
             borderColor: '#ea580c',
             backgroundColor: 'rgba(234, 88, 12, 0.1)',
-            borderWidth: 3,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#ea580c',
-            pointRadius: 4
+            pointRadius: 4,
+            pointBackgroundColor: '#ea580c'
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(val) { return 'RM ' + val; },
-                font: { size: 10 }
-              },
-              grid: { color: '#f1f5f9' }
-            },
-            x: {
-              ticks: { font: { size: 10 } },
-              grid: { display: false }
-            }
+            y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+            x: { grid: { display: false }, ticks: { font: { size: 10 } } }
           }
         }
       });
-    }
 
-    function renderStockDoughnutChart(normal, low, out) {
-      const ctx = document.getElementById('stockDoughnutChart').getContext('2d');
+      // Stock status counts
+      let normalCount = 0;
+      let lowCount = 0;
+      let outCount = 0;
+      products.forEach(p => {
+        if (p.stockQty <= 0) outCount++;
+        else if (p.stockQty <= p.minStock) lowCount++;
+        else normalCount++;
+      });
+
+      const normalEl = document.getElementById('statStockNormal');
+      const lowEl = document.getElementById('statStockLow');
+      const outEl = document.getElementById('statStockOut');
+      if (normalEl) normalEl.innerText = normalCount;
+      if (lowEl) lowEl.innerText = lowCount;
+      if (outEl) outEl.innerText = outCount;
+
       if (stockChartInstance) stockChartInstance.destroy();
-
-      stockChartInstance = new Chart(ctx, {
+      stockChartInstance = new Chart(stockCanvas, {
         type: 'doughnut',
         data: {
           labels: ['Cukup', 'Rendah', 'Habis'],
           datasets: [{
-            data: [normal, low, out],
+            data: [normalCount, lowCount, outCount],
             backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
-            borderWidth: 0
+            borderWidth: 2,
+            borderColor: '#ffffff'
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           cutout: '70%',
-          plugins: {
-            legend: { display: false }
-          }
+          plugins: { legend: { display: false } }
         }
       });
+    }
+
+    function populateCategoryDropdowns() {
+      // 1. Filter dropdown in Products management
+      const filterSelect = document.getElementById('productFilterCategory');
+      if (filterSelect) {
+        const currentVal = filterSelect.value || 'ALL';
+        filterSelect.innerHTML = `
+          <option value="ALL">Semua Kategori</option>
+          ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
+        `;
+        if (categories.includes(currentVal)) {
+          filterSelect.value = currentVal;
+        } else {
+          filterSelect.value = 'ALL';
+        }
+      }
+
+      // 2. Add/Edit Product form select
+      const prodCatSelect = document.getElementById('prodCategory');
+      if (prodCatSelect) {
+        const currentVal = prodCatSelect.value;
+        prodCatSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+        if (currentVal && categories.includes(currentVal)) {
+          prodCatSelect.value = currentVal;
+        }
+      }
+    }
+
+    function openCategoryModal() {
+      if (currentUser && currentUser.role !== 'ADMIN') {
+        showToast('Akses terhad kepada Admin untuk mengurus kategori.', 'error');
+        return;
+      }
+      document.getElementById('newCategoryInput').value = '';
+      renderCategoryList();
+      openModal('categoryModal');
+    }
+
+    function renderCategoryList() {
+      const container = document.getElementById('categoryListContainer');
+      if (!container) return;
+
+      if (categories.length === 0) {
+        container.innerHTML = `<p class="py-4 text-center text-slate-400">Tiada kategori. Sila tambah kategori baharu.</p>`;
+        return;
+      }
+
+      container.innerHTML = categories.map(cat => {
+        // Count how many products currently use this category
+        const usageCount = products.filter(p => p.category === cat).length;
+        return `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 hover:border-orange-200 transition">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+              <span class="font-bold text-slate-800 text-xs">${cat}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600 font-semibold">${usageCount} produk</span>
+            </div>
+            <button type="button" onclick="deleteCategory('${cat}')" class="p-1.5 text-rose-500 hover:bg-rose-50 hover:text-rose-700 rounded-lg touch-btn" title="Padam Kategori">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const input = document.getElementById('newCategoryInput');
+      const catName = input.value.trim();
+
+      if (!catName) {
+        showToast('Sila masukkan nama kategori.', 'warning');
+        return;
+      }
+
+      // Check case-insensitive duplicate
+      const exists = categories.some(c => c.toLowerCase() === catName.toLowerCase());
+      if (exists) {
+        showToast(`Kategori "${catName}" telah pun wujud!`, 'warning');
+        return;
+      }
+
+      categories.push(catName);
+      syncStorage('categories');
+      recordAuditLog('KATEGORI', `Admin menambah kategori baru: ${catName}`);
+      showToast(`Kategori "${catName}" berjaya ditambah!`, 'success');
+
+      input.value = '';
+      populateCategoryDropdowns();
+      renderCategoryList();
+      renderPosCatalog();
+    }
+
+    function deleteCategory(catName) {
+      if (currentUser.role !== 'ADMIN') return;
+
+      const productsUsing = products.filter(p => p.category === catName);
+
+      let msg = `Adakah anda pasti untuk memadam kategori "${catName}"?`;
+      if (productsUsing.length > 0) {
+        msg = `Amaran: Terdapat ${productsUsing.length} produk kroket menggunakan kategori "${catName}". Jika dipadam, produk ini akan dipindahkan ke kategori "Umum". Teruskan?`;
+      }
+
+      showConfirm('Padam Kategori', msg, () => {
+        // If products are using this category, reassign them to 'Umum' or first available category
+        if (productsUsing.length > 0) {
+          if (!categories.includes('Umum')) {
+            categories.push('Umum');
+          }
+          productsUsing.forEach(p => {
+            p.category = 'Umum';
+          });
+          syncStorage('products');
+        }
+
+        categories = categories.filter(c => c !== catName);
+        syncStorage('categories');
+        recordAuditLog('KATEGORI', `Admin memadam kategori: ${catName}`);
+
+        populateCategoryDropdowns();
+        renderCategoryList();
+        renderProductsTable();
+        renderPosCatalog();
+
+        showToast(`Kategori "${catName}" telah dipadam.`, 'info');
+      }, 'fa-solid fa-trash-can');
     }
 
     function renderPosCatalog() {
@@ -2146,15 +2499,19 @@
       const catalogGrid = document.getElementById('posCatalogGrid');
       const categoryTabs = document.getElementById('posCategoryTabs');
 
-      // Categories
-      const categories = ['ALL', 'Ayam', 'Daging', 'Cheese', 'Sayur', 'Seafood', 'Special'];
-      categoryTabs.innerHTML = categories.map(cat => `
+      // Include 'ALL' followed by dynamic categories
+      const activeCategories = ['ALL', ...categories];
+
+      if (!activeCategories.includes(currentPosCategory)) {
+        currentPosCategory = 'ALL';
+      }
+
+      categoryTabs.innerHTML = activeCategories.map(cat => `
         <button onclick="setPosCategory('${cat}')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition touch-btn ${currentPosCategory === cat ? 'bg-orange-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
           ${cat === 'ALL' ? 'Semua' : cat}
         </button>
       `).join('');
 
-      // Filter products
       const filtered = products.filter(p => {
         const matchesQuery = p.name.toLowerCase().includes(query) || p.sku.toLowerCase().includes(query);
         const matchesCat = currentPosCategory === 'ALL' || p.category === currentPosCategory;
@@ -2210,7 +2567,6 @@
       renderPosCatalog();
     }
 
-    /* Cart Management */
     function addToCart(productId) {
       const product = products.find(p => p.id === productId);
       if (!product) return;
@@ -2290,7 +2646,6 @@
       document.getElementById('posSubtotal').innerText = formatRM(subtotal);
       document.getElementById('posGrandTotal').innerText = formatRM(grandTotal);
 
-      // Mobile badge
       const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
       const badge = document.getElementById('posCartCountBadge');
       if (totalCount > 0) {
@@ -2300,7 +2655,6 @@
         badge.classList.add('hidden');
       }
 
-      // Checkout button enabled state
       const checkoutBtn = document.getElementById('posCheckoutBtn');
       checkoutBtn.disabled = cart.length === 0 || grandTotal <= 0;
     }
@@ -2352,7 +2706,6 @@
     function processCheckout() {
       if (cart.length === 0) return;
 
-      // Final stock verification
       for (const item of cart) {
         const prod = products.find(p => p.id === item.productId);
         if (!prod || prod.stockQty < item.qty) {
@@ -2366,10 +2719,8 @@
       const grandTotal = Math.max(0, subtotal - discount);
       const totalCost = cart.reduce((sum, item) => sum + (item.qty * item.costPrice), 0);
 
-      // Generate Receipt Number
       const receiptNo = 'INV-' + new Date().getFullYear() + '-' + String(sales.length + 1).padStart(4, '0');
 
-      // Deduct stock automatically and write stock audit logs
       cart.forEach(item => {
         const prod = products.find(p => p.id === item.productId);
         const prevStock = prod.stockQty;
@@ -2390,7 +2741,6 @@
         });
       });
 
-      // Save Sale Record
       const saleRecord = {
         receiptNo: receiptNo,
         timestamp: new Date().toISOString(),
@@ -2406,17 +2756,14 @@
 
       sales.unshift(saleRecord);
 
-      // Audit log
       recordAuditLog('JUALAN', `${currentUser.fullName} menyelesaikan jualan ${receiptNo} berjumlah ${formatRM(grandTotal)} (${currentPaymentMethod})`);
 
-      // Persist updates
       syncStorage('products');
       syncStorage('sales');
       syncStorage('stockLogs');
 
       lastGeneratedReceipt = saleRecord;
 
-      // Reset cart
       cart = [];
       document.getElementById('posDiscountInput').value = '0.00';
       updateCartTotals();
@@ -2618,7 +2965,6 @@
       const unit = document.getElementById('prodUnit').value || 'pcs';
 
       if (editId) {
-        // Edit existing product
         const prod = products.find(p => p.id === editId);
         if (prod) {
           prod.sku = sku;
@@ -2638,7 +2984,6 @@
           showToast('Produk berjaya dikemaskini!', 'success');
         }
       } else {
-        // Add new
         const newProd = {
           id: 'PRD-' + Date.now().toString().slice(-4),
           sku: sku,
@@ -2855,7 +3200,6 @@
       showToast('Transaksi stok berjaya dikemaskini!', 'success');
     }
 
-    /* Open Low Stock notification modal */
     function openLowStockModal() {
       const container = document.getElementById('lowStockListContainer');
       const critical = products.filter(p => p.stockQty <= p.minStock);
@@ -2995,7 +3339,6 @@
 
       const now = new Date();
       const filtered = sales.filter(s => {
-        // Staff only sees their own sales unless admin
         if (!isAdmin && s.cashierUsername !== currentUser.username) {
           return false;
         }
@@ -3016,7 +3359,6 @@
         return matchDate && matchPay;
       });
 
-      // Calculate totals
       let rev = 0;
       let cost = 0;
       let itemsCount = 0;
@@ -3157,7 +3499,6 @@
       const pass = document.getElementById('userPassword').value;
 
       if (id) {
-        // Edit
         const u = users.find(x => x.id === id);
         if (u) {
           u.fullName = fullName;
@@ -3170,7 +3511,6 @@
           showToast('Akaun pengguna berjaya dikemaskini!', 'success');
         }
       } else {
-        // Add
         if (users.some(x => x.username.toLowerCase() === username)) {
           showToast('Username ini telah wujud. Sila pilih yang lain.', 'error');
           return;
@@ -3267,6 +3607,7 @@
         version: '1.0.0',
         exportedAt: new Date().toISOString(),
         products: products,
+        categories: categories,
         users: users,
         settings: settings,
         sales: sales,
@@ -3308,6 +3649,7 @@
 
           showConfirm('Pulihkan Sandaran', 'Amaran: Tindakan ini akan menggantikan SEMUA data sedia ada dengan data sandaran. Teruskan?', () => {
             products = parsed.products || [];
+            categories = parsed.categories || DEFAULT_CATEGORIES;
             users = parsed.users || [];
             settings = parsed.settings || DEFAULT_SETTINGS;
             sales = parsed.sales || [];
@@ -3316,6 +3658,7 @@
             auditLogs = parsed.auditLogs || [];
 
             syncStorage('products');
+            syncStorage('categories');
             syncStorage('users');
             syncStorage('settings');
             syncStorage('sales');
@@ -3345,6 +3688,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      injectWebManifest();
       initDatabase();
     });
   </script>
