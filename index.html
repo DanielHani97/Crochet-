@@ -1908,10 +1908,62 @@
       el.type = el.type === 'password' ? 'text' : 'password';
     }
 
+    function saveUserSession(user, remember = false, currentView = 'dashboard') {
+      const sessionPayload = {
+        userId: user.id,
+        username: user.username,
+        role: user.role,
+        lastView: currentView,
+        loginAt: new Date().toISOString()
+      };
+
+      const sessionStr = JSON.stringify(sessionPayload);
+      if (remember) {
+        localStorage.setItem(STORAGE_PREFIX + 'session', sessionStr);
+        sessionStorage.removeItem(STORAGE_PREFIX + 'session');
+      } else {
+        sessionStorage.setItem(STORAGE_PREFIX + 'session', sessionStr);
+        localStorage.removeItem(STORAGE_PREFIX + 'session');
+      }
+    }
+
+    function clearUserSession() {
+      localStorage.removeItem(STORAGE_PREFIX + 'session');
+      sessionStorage.removeItem(STORAGE_PREFIX + 'session');
+    }
+
+    function restoreUserSession() {
+      try {
+        const savedSessionRaw = localStorage.getItem(STORAGE_PREFIX + 'session') || sessionStorage.getItem(STORAGE_PREFIX + 'session');
+        if (!savedSessionRaw) return false;
+
+        const session = JSON.parse(savedSessionRaw);
+        const user = users.find(u => u.id === session.userId || u.username.toLowerCase() === session.username?.toLowerCase());
+
+        if (user && user.status === 'ACTIVE') {
+          currentUser = user;
+          setupUserSessionUI();
+          document.getElementById('loginScreen').classList.add('hidden');
+          document.getElementById('mainApp').classList.remove('hidden');
+
+          const targetView = session.lastView || 'dashboard';
+          navigateTo(targetView);
+          return true;
+        } else {
+          clearUserSession();
+        }
+      } catch (err) {
+        console.warn('Ralat memulihkan sesi pengguna:', err);
+        clearUserSession();
+      }
+      return false;
+    }
+
     function handleLogin(e) {
       e.preventDefault();
       const usernameInput = document.getElementById('loginUsername').value.trim().toLowerCase();
       const passwordInput = document.getElementById('loginPassword').value;
+      const rememberMe = document.getElementById('loginRemember').checked;
 
       const user = users.find(u => u.username.toLowerCase() === usernameInput);
 
@@ -1934,6 +1986,9 @@
       user.lastLogin = getNowDateTimeString();
       syncStorage('users');
 
+      // Simpan sesi log masuk berterusan
+      saveUserSession(user, rememberMe, 'dashboard');
+
       recordAuditLog('LOGIN', `${user.fullName} (${user.role}) berjaya log masuk`);
       showToast(`Selamat kembali, ${user.fullName}!`, 'success');
 
@@ -1947,6 +2002,7 @@
     function handleLogout() {
       showConfirm('Log Keluar Sistem', 'Adakah anda pasti untuk menamatkan sesi ini?', () => {
         recordAuditLog('LOGOUT', `${currentUser.fullName} log keluar`);
+        clearUserSession();
         currentUser = null;
         document.getElementById('mainApp').classList.add('hidden');
         document.getElementById('loginScreen').classList.remove('hidden');
@@ -2053,6 +2109,11 @@
       } else {
         document.getElementById('view-dashboard').classList.remove('hidden');
         viewId = 'dashboard';
+      }
+
+      if (currentUser) {
+        const isRemembered = !!localStorage.getItem(STORAGE_PREFIX + 'session');
+        saveUserSession(currentUser, isRemembered, viewId);
       }
 
       document.querySelectorAll('.nav-item').forEach(el => {
@@ -3690,6 +3751,10 @@
     window.addEventListener('DOMContentLoaded', () => {
       injectWebManifest();
       initDatabase();
+      const sessionRestored = restoreUserSession();
+      if (sessionRestored) {
+        showToast(`Sesi dipulihkan: Log masuk sebagai ${currentUser.fullName}`, 'info');
+      }
     });
   </script>
 </body>
